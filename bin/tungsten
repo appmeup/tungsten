@@ -1,2 +1,12 @@
 #!/usr/bin/env ruby
-puts "Run Tungsten"
+require 'tungsten/cli'
+
+begin
+  cli = Tungsten::CLI.new
+  cli.parse
+  cli.run
+rescue => e
+  STDERR.puts e.message
+  STDERR.puts e.backtrace.join("\n")
+  exit 1
+end
