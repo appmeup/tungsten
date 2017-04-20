@@ -1,4 +1,4 @@
-require 'yaml'
+require 'tungsten'
 require 'optparse'
 
 module Tungsten
@@ -8,11 +8,16 @@ module Tungsten
     end
 
     def parse
-      puts "Parsing options"
+      Tungsten.options.merge!(parse_options(ARGV))
+      puts "With options: #{Tungsten.options.inspect}"
     end
 
     def run
-      puts "Running tungsten!"
+      initial_time = Time.new
+      puts "[#{initial_time.to_s}] Starting tungsten..."
+      Tungsten.load_configuration!
+      servers = Tungsten.configuration[:servers]
+      puts "[#{initial_time.to_s}] Done"
     end
 
     def parse_options(argsv)
