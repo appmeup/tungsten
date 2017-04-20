@@ -11,12 +11,16 @@ module Tungsten
       @options = options
     end
 
-    def type
-      options[:type]
+    def roles
+      options[:roles]
+    end
+
+    def has_role?(role)
+      options[:roles].include?(role) rescue false
     end
 
     def execute(command)
-      
+
     end
   end
 end

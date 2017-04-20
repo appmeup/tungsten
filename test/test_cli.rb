@@ -7,7 +7,7 @@ class TestCli < Minitest::Test
 
     describe 'without flags' do
       it "should not return error" do
-        cli.parse(['tungsten', '-C', 'test/config.yaml'])
+        cli.parse(['tungsten', '-C', 'test/config.yml'])
         # assert !cli.options[:config_file].nil?
       end
     end

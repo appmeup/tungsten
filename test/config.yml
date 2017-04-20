@@ -1,0 +1,13 @@
+servers:
+  -
+    name: 'web1'
+    address: 'http://test1.com'
+    roles: 'web'
+  -
+    name: 'web2'
+    address: 'http://test2.com'
+    roles: 'web'
+  -
+    name: 'db1'
+    address: '192.168.0.1'
+    roles: 'db'
