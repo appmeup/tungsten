@@ -15,8 +15,7 @@ module Tungsten
     def run
       initial_time = Time.new
       puts "[#{initial_time.to_s}] Starting tungsten..."
-      Tungsten.load_configuration!
-      servers = Tungsten.configuration[:servers]
+      Tungsten.load!
       puts "[#{initial_time.to_s}] Done"
     end
 
@@ -26,13 +25,10 @@ module Tungsten
       @parser = OptionParser.new do |opt|
         opt.banner = "Usage: tungsten [options]"
 
-        opt.on '-C', '--config PATH', 'path to config file (YAML)' do |arg|
+        opt.on '-C', '--config PATH', 'path to config file' do |arg|
           opts[:config_file] = arg if File.exist?(arg)
         end
       end
-
-      opts[:config_file] ||= 'config/tungsten.yml' if File.exist?('config/tungsten.yml')
-
       @parser.parse!(argsv)
 
       opts
