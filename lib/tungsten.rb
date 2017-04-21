@@ -8,6 +8,8 @@ module Tungsten
   }
 
   class << self
+    include Tungsten::DSL
+
     def options
       @options ||= DEFAULT_OPTIONS.dup
     end
@@ -17,8 +19,8 @@ module Tungsten
     end
 
     def load!
-      include Tungsten::DSL
-      load options[:config_file]
+      eval(File.open(options[:config_file], 'r').read)
+      # load options[:config_file]
     end
   end
 end
