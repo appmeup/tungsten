@@ -6,7 +6,7 @@ module Tungsten
   class Server
     attr_accessor :address
 
-    def initialize(address:, options:{})
+    def initialize(address, options={})
       @address = address
       @options = options
     end

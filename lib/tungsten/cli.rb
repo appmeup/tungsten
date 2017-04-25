@@ -26,7 +26,7 @@ module Tungsten
         opt.banner = "Usage: tungsten [options]"
 
         opt.on '-C', '--config PATH', 'path to config file' do |arg|
-          opts[:config_file] = arg if File.exist?(arg)
+          opts[:config_file] = arg
         end
       end
       @parser.parse!(argsv)
