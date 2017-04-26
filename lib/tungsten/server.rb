@@ -1,7 +1,3 @@
-require 'sshkit'
-require 'sshkit/dsl'
-include SSHKit::DSL
-
 module Tungsten
   class Server
     attr_accessor :address
@@ -12,15 +8,22 @@ module Tungsten
     end
 
     def roles
-      options[:roles]
+      @options[:roles]
     end
 
     def has_role?(role)
-      options[:roles].include?(role) rescue false
+      self.roles.include?(role.to_s) rescue false
     end
 
-    def execute(command)
+    def ssh_options
+      return {
+        user: options[:user],
+        keys: [options[:key]].flatten
+      }
+    end
 
+    def has_custom_ssh?
+      options.has_key?(:user) || options.has_key?(:key)
     end
   end
 end

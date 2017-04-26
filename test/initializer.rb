@@ -1,4 +1,5 @@
-puts "Im the initializer :)"
-server '192.168.0.1', custom: 'something'
+server '192.168.0.2', roles: %w(web), user: 'ubuntu', key: '../raaf-api/config/raaf-certificate.cer'
 
-puts "Servers are: #{servers.inspect}"
+commands :web do
+
+end

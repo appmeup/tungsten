@@ -20,7 +20,7 @@ module Tungsten
 
     def load!
       eval(File.open(options[:config_file], 'r').read)
-      # load options[:config_file]
+      run_dsl!
     end
   end
 end

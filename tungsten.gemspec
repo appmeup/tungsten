@@ -35,5 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "5.10.1"
   spec.add_development_dependency "byebug", '9.0.6'
 
-  spec.add_dependency "sshkit"
+  spec.add_dependency "sshkit", '1.13.1'
 end
