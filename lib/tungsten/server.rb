@@ -17,8 +17,8 @@ module Tungsten
 
     def ssh_options
       return {
-        user: options[:user],
-        keys: [options[:key]].flatten
+        user: @options[:user],
+        keys: [@options[:key]].flatten
       }
     end
 

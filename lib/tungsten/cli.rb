@@ -9,19 +9,26 @@ module Tungsten
 
     def parse
       Tungsten.options.merge!(parse_options(ARGV))
-      puts "With options: #{Tungsten.options.inspect}"
+      # puts "With options: #{Tungsten.options.inspect}"
     end
 
     def run
       initial_time = Time.new
       puts "[#{initial_time.to_s}] Starting tungsten..."
       Tungsten.load!
+
+      case ARGV[0]
+      when "install"
+        Tungsten.install!
+      else
+        Tungsten.execute!
+      end
+
       puts "[#{initial_time.to_s}] Done"
     end
 
     def parse_options(argsv)
       opts = {}
-
       @parser = OptionParser.new do |opt|
         opt.banner = "Usage: tungsten [options]"
 
