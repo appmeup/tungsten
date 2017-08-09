@@ -1,9 +1,5 @@
-require 'tungsten/server'
-
 module Tungsten
   module DSL
-    attr_accessor :servers
-
     def add_server(address, options)
       Tungsten.register_server(address, options)
     end

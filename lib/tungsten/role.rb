@@ -2,15 +2,15 @@ module Tungsten
   class Role
     def initialize(name)
       @name = name
-      @library_names = []
+      @libraries = {}
     end
 
     def libraries
-      @library_names
+      @libraries
     end
 
-    def uses(library_name)
-      @library_names << library_name unless @library_names.include?(library_name)
+    def uses(library_name, args={})
+      @libraries[library_name] = args unless @libraries.keys.include?(library_name)
     end
   end
 end

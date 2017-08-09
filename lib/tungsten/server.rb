@@ -5,6 +5,7 @@ module Tungsten
     def initialize(address, options={})
       @address = address
       @options = options
+      @libraries = []
     end
 
     def roles
@@ -26,22 +27,40 @@ module Tungsten
       options.has_key?(:user) || options.has_key?(:key)
     end
 
-    def install!
+    def libraries
+      if !@libraries.empty?
+        return @libraries
+      end
+
+      return self.load_libraries
+    end
+
+    def load_libraries
       server_roles = []
+      unique_libraries = {}
+
       Tungsten.roles.keys.each do |role|
         server_roles << Tungsten.roles[role] if roles.include?(role)
       end
-      unique_libraries = []
+
       server_roles.each do |role|
-        unique_libraries << role.libraries
+        role.libraries.keys.each do |library_name|
+          unique_libraries[library_name] = role.libraries[library_name] if !unique_libraries.keys.include?(library_name)
+        end
       end
-      unique_libraries.flatten!.uniq!
-      server_libraries = []
-      Tungsten.libraries.keys.each do |library|
-        server_libraries << Tungsten.libraries[library]
+
+      Tungsten.libraries.keys.select{|library_name| unique_libraries.keys.include?(library_name) }.each do |library_name|
+        library = Tungsten.libraries[library_name].dup
+        library.merge_args(unique_libraries[library_name])
+        @libraries << library
       end
-      server_libraries.each do |library|
-        library.execute_phase!(:install, self)
+
+      return @libraries
+    end
+
+    def execute!(phase)
+      libraries.each do |library|
+        library.execute_phase!(phase, self)
       end
     end
   end

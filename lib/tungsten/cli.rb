@@ -15,9 +15,18 @@ module Tungsten
     def run
       initial_time = Time.new
       puts "[#{initial_time.to_s}] Starting tungsten..."
-      
+
+      # Load Tungsten configuration
       Tungsten.load!
-      Tungsten.install!
+
+      # Check which action was executed
+      case ARGV[0]
+      when 'install'
+        # Run installation commands
+        Tungsten.install!
+      else
+        puts "No action specified"
+      end
 
       puts "[#{Time.new.to_s}] Done"
     end
@@ -29,6 +38,10 @@ module Tungsten
 
         opt.on '-C', '--config PATH', 'path to config file' do |arg|
           opts[:config_file] = arg
+        end
+
+        opt.on '-L', '--libraries PATH', 'path to libraries directory' do |arg|
+          opts[:libraries_directory] = arg
         end
       end
       @parser.parse!(argsv)
