@@ -29,10 +29,15 @@ library :redis do
     end
   end
 
-  phase :run do
+  phase :start do
     within args[:main_dir] do
       as :root do
-        execute("sudo #{args[:bin_command]} #{args[:config_file]}") rescue puts("Redis run command failed")
+        pid = capture("sudo cat #{args[:pidfile]}") rescue nil
+        if pid
+          puts "Redis already is running"
+        else
+          execute("sudo #{args[:bin_command]} #{args[:config_file]}") rescue puts("Redis run command failed")
+        end
       end
     end
   end

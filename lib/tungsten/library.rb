@@ -6,7 +6,7 @@ module Tungsten
   class Library
     include SSHKit::DSL
 
-    PHASES = %w(install setup run stop check uninstall)
+    PHASES = %w(install setup start stop check uninstall)
 
     def initialize(name, args = {})
       @name = name

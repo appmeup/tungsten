@@ -30,9 +30,9 @@ module Tungsten
       when 'setup'
         # Run setup commands
         Tungsten.setup!
-      when 'run'
-        # Run run commands
-        Tungsten.run!
+      when 'start'
+        # Run start commands
+        Tungsten.start!
       when 'stop'
         # Run stop commands
         Tungsten.stop!

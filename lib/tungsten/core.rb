@@ -63,9 +63,9 @@ module Tungsten
       end
     end
 
-    def run!
+    def start!
       servers_iteration do |server, role|
-        server.execute!(:run)
+        server.execute!(:start)
       end
     end
 
