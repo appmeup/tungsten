@@ -48,7 +48,7 @@ module Tungsten
           unique_libraries[library_name] = role.libraries[library_name] if !unique_libraries.keys.include?(library_name)
         end
       end
-
+      
       Tungsten.libraries.keys.select{|library_name| unique_libraries.keys.include?(library_name) }.each do |library_name|
         library = Tungsten.libraries[library_name].dup
         library.merge_args(unique_libraries[library_name])

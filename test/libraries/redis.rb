@@ -1,4 +1,7 @@
 library :redis do
+  add_variable :config_directory, 'redis', 'The root directory of Redis configuration'
+  add_variable :config_file, config_directory+'/redis.conf', 'Redis main configuraiton file'
+
   phase :install do
     as :root do
       execute(:rm, '/etc/apt/sources.list.d/dotdeb.org.list')
@@ -12,22 +15,16 @@ library :redis do
   end
 
   phase :setup do
-    config_directory = args[:config_directory] || 'redis'
-    config_file = config_directory+'/'+(args[:conf_file] || 'redis.conf')
-
     as :root do
-      execute(:mkdir, "-p #{config_directory}") rescue nil
-      execute(:touch, config_file)
-      execute("echo 'daemonize yes' | sudo tee -a #{config_file}")
+      execute(:mkdir, "-p #{variables[:config_directory]}") rescue nil
+      execute(:touch, variables[:config_file])
+      execute("echo 'daemonize yes' | sudo tee -a #{variables[:config_file]}")
     end
   end
 
   phase :run do
-    config_directory = args[:config_directory] || 'redis'
-    config_file = config_directory+'/'+(args[:conf_file] || 'redis.conf')
-
     as :root do
-      execute('redis-server '+config_file) rescue puts("Redis run command failed")
+      execute("redis-server #{variables[:config_file]}") rescue puts("Redis run command failed")
     end
   end
 end

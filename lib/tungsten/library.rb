@@ -1,3 +1,4 @@
+require 'tungsten/variable'
 require 'sshkit'
 require 'sshkit/dsl'
 
@@ -11,6 +12,7 @@ module Tungsten
       @name = name
       @phases = {}
       @args = args
+      @variables = {}
     end
 
     def set_args(args)
@@ -23,17 +25,29 @@ module Tungsten
 
     def execute_phase!(phase_name, instance)
       if @phases[phase_name]
-        tungsten_args = @args.dup
         phase_block = @phases[phase_name]
+        default_variables = variables_to_h
+        variables = default_variables.merge(@args)
         library = self
+        defaults = default_variables
 
         puts "#{@name}/#{phase_name}"
 
         on instance.address do
-          @tungsten_args = tungsten_args
+          @variables = variables
+          @library = library
+          @defaults = defaults
 
-          def args
-            @tungsten_args
+          def variables
+            @variables
+          end
+
+          def library
+            @library
+          end
+
+          def defaults
+            @defaults
           end
 
           instance_eval(&phase_block)
@@ -41,6 +55,22 @@ module Tungsten
       else
         puts "#{@name}/#{phase_name} not configured"
       end
+    end
+
+    def variables_to_h
+      variables = {}
+      @variables.keys.each do |key|
+        variables[key] = @variables[key].value
+      end
+      variables
+    end
+
+    def method_missing(name, *args, &block)
+      if @variables[name]
+        return @variables[name].value
+      end
+
+      raise "No method #{name} found"
     end
 
     #####################
@@ -52,6 +82,14 @@ module Tungsten
         @phases[phase_name] = block
       else
         puts "Phase #{phase_name} doesn't exist"
+      end
+    end
+
+    def add_variable(key, default_value = nil, description = 'No description')
+      if !@variables.keys.include?(key)
+        @variables[key] = Variable.new(key, default_value, description)
+      else
+        puts "Variable #{key} already defined!"
       end
     end
   end
