@@ -1,14 +1,5 @@
-server '34.204.37.136', roles: %w(app), user: 'ubuntu', key: '~/Desktop/test.cer'
-
-installation :web do |instance|
-  on instance.address do
-
-  end
-end
-
-installation :app do |instance|
-  on instance.address do
-    # Install Redis
+library :redis do
+  phase :install do |instance|
     as :root do
       execute(:rm, '/etc/apt/sources.list.d/dotdeb.org.list')
       execute(:touch, '/etc/apt/sources.list.d/dotdeb.org.list')
@@ -21,14 +12,15 @@ installation :app do |instance|
   end
 end
 
-execution :web do |instance|
-  on instance.address do
-
+library :postgresql do
+  phase :install do
+    puts "PostgreSQL installed!"
   end
 end
 
-execution :app do |instance|
-  on instance.address do
+add_server '34.204.37.136', roles: [:app, :db], user: 'ubuntu', key: '../raaf-api/config/raaf-certificate.cer'
 
-  end
+role :app do
+  uses :redis
+  uses :postgresql
 end

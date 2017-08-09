@@ -15,16 +15,11 @@ module Tungsten
     def run
       initial_time = Time.new
       puts "[#{initial_time.to_s}] Starting tungsten..."
+      
       Tungsten.load!
+      Tungsten.install!
 
-      case ARGV[0]
-      when "install"
-        Tungsten.install!
-      else
-        Tungsten.execute!
-      end
-
-      puts "[#{initial_time.to_s}] Done"
+      puts "[#{Time.new.to_s}] Done"
     end
 
     def parse_options(argsv)
