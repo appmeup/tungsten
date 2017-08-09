@@ -42,12 +42,56 @@ module Tungsten
       end
     end
 
-    # For each server: install, setup and run each library used by its role
-    def install!
+    def init!
       servers_iteration do |server, role|
         server.execute!(:install)
         server.execute!(:setup)
         server.execute!(:run)
+      end
+    end
+
+    # For each server: install, setup and run each library used by its role
+    def install!
+      servers_iteration do |server, role|
+        server.execute!(:install)
+      end
+    end
+
+    def setup!
+      servers_iteration do |server, role|
+        server.execute!(:setup)
+      end
+    end
+
+    def run!
+      servers_iteration do |server, role|
+        server.execute!(:run)
+      end
+    end
+
+    def stop!
+      servers_iteration do |server, role|
+        server.execute!(:stop)
+      end
+    end
+
+    def check!
+      servers_iteration do |server, role|
+        server.execute!(:check)
+      end
+    end
+
+    def restart!
+      servers_iteration do |server, role|
+        server.execute!(:stop)
+        server.execute!(:run)
+      end
+    end
+
+    def uninstall!
+      servers_iteration do |server, role|
+        server.execute!(:stop)
+        server.execute!(:uninstall)
       end
     end
 

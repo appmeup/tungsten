@@ -6,13 +6,13 @@ module Tungsten
   class Library
     include SSHKit::DSL
 
-    PHASES = %w(install setup run restart shutdown uninstall error check)
+    PHASES = %w(install setup run stop check uninstall)
 
     def initialize(name, args = {})
       @name = name
       @phases = {}
       @args = args
-      @variables = {}
+      @defaults = {}
     end
 
     def set_args(args)
@@ -26,28 +26,28 @@ module Tungsten
     def execute_phase!(phase_name, instance)
       if @phases[phase_name]
         phase_block = @phases[phase_name]
-        default_variables = variables_to_h
-        variables = default_variables.merge(@args)
+        default_args = variables_to_h
+        args = default_args.merge(@args)
         library = self
-        defaults = default_variables
+        defaults = default_args
 
         puts "#{@name}/#{phase_name}"
 
         on instance.address do
-          @variables = variables
+          @defaults = default_args
           @library = library
-          @defaults = defaults
+          @args = args
 
-          def variables
-            @variables
+          def defaults
+            @defaults
           end
 
           def library
             @library
           end
 
-          def defaults
-            @defaults
+          def args
+            @args
           end
 
           instance_eval(&phase_block)
@@ -59,15 +59,15 @@ module Tungsten
 
     def variables_to_h
       variables = {}
-      @variables.keys.each do |key|
-        variables[key] = @variables[key].value
+      @defaults.keys.each do |key|
+        variables[key] = @defaults[key].value
       end
       variables
     end
 
     def method_missing(name, *args, &block)
-      if @variables[name]
-        return @variables[name].value
+      if @defaults[name]
+        return @defaults[name].value
       end
 
       raise "No method #{name} found"
@@ -85,9 +85,9 @@ module Tungsten
       end
     end
 
-    def add_variable(key, default_value = nil, description = 'No description')
-      if !@variables.keys.include?(key)
-        @variables[key] = Variable.new(key, default_value, description)
+    def default(key, default_value = nil, description = 'No description')
+      if !@defaults.keys.include?(key)
+        @defaults[key] = Variable.new(key, default_value, description)
       else
         puts "Variable #{key} already defined!"
       end

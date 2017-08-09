@@ -21,11 +21,32 @@ module Tungsten
 
       # Check which action was executed
       case ARGV[0]
+      when 'init'
+        # Run installation, setup and run commands
+        Tungsten.init!
       when 'install'
         # Run installation commands
         Tungsten.install!
+      when 'setup'
+        # Run setup commands
+        Tungsten.setup!
+      when 'run'
+        # Run run commands
+        Tungsten.run!
+      when 'stop'
+        # Run stop commands
+        Tungsten.stop!
+      when 'check'
+        # Run check commands
+        Tungsten.check!
+      when 'restart'
+        # Run stop and run commands
+        Tungsten.restart!
+      when 'uninstall'
+        # Run stop and uninstall commands
+        Tungsten.uninstall!
       else
-        puts "No action specified"
+        puts "No action supported"
       end
 
       puts "[#{Time.new.to_s}] Done"
