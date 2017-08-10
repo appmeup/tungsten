@@ -1,4 +1,7 @@
 library :redis do
+  lock '0.1.0'
+  metadata :description, 'Redis installation for AWS EC3 instances'
+
   default :bin_command, 'redis-server', 'Redis executable bin'
   default :main_dir, '/etc/redis', 'The root directory of Redis configuration'
   default :config_file, main_dir+'/redis.conf', 'Redis main configuration file'

@@ -8,11 +8,24 @@ module Tungsten
 
     PHASES = %w(install setup start stop check uninstall)
 
-    def initialize(name, args = {})
+    def initialize(name, metadata = {})
       @name = name
       @phases = {}
-      @args = args
+      @args = {}
       @defaults = {}
+      @metadata = metadata
+    end
+
+    def name
+      @name
+    end
+
+    def phases
+      @phases
+    end
+
+    def variables
+      @defaults
     end
 
     def set_args(args)
@@ -25,6 +38,9 @@ module Tungsten
 
     def execute_phase!(phase_name, instance)
       if @phases[phase_name]
+        if @metadata['lock'] && @metadata['lock'].gsub('.', '') < VERSION.gsub('.', '')
+          puts "[WARN] #{@name} is locked on Tungsten #{@metadata['lock']} (Current Tungsten version is: #{VERSION})"
+        end
         phase_block = @phases[phase_name]
         default_args = variables_to_h
         args = default_args.merge(@args)
@@ -73,6 +89,10 @@ module Tungsten
       raise "No method #{name} found"
     end
 
+    def get_metadata
+      @metadata
+    end
+
     #####################
     # Library DSL
     #####################
@@ -91,6 +111,14 @@ module Tungsten
       else
         puts "Variable #{key} already defined!"
       end
+    end
+
+    def metadata(key, value)
+      @metadata[key] = value
+    end
+
+    def lock(version)
+      @metadata[:lock] = version
     end
   end
 end

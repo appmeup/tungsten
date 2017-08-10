@@ -42,12 +42,12 @@ module Tungsten
       end
     end
 
+    ###################
+    # CLI comamnds
+    ###################
+
     def init!
-      servers_iteration do |server, role|
-        server.execute!(:install)
-        server.execute!(:setup)
-        server.execute!(:run)
-      end
+      # Initialize Tungsten by creating the config file
     end
 
     # For each server: install, setup and run each library used by its role
@@ -94,6 +94,28 @@ module Tungsten
         server.execute!(:uninstall)
       end
     end
+
+    def display_lib_info!(library_name)
+      lib = libraries[library_name.to_sym]
+      puts lib.name
+      puts(lib.get_metadata[:description]) if lib.get_metadata[:description]
+      puts "----------------------"
+      puts "Locked at version: #{lib.get_metadata[:lock] || "Not locked"}"
+      puts "----------------------"
+      puts "Phases"
+      puts lib.phases.keys.join(', ')
+      puts "----------------------"
+      puts "Variables"
+      variables = lib.variables.to_h
+      variables.keys.each do |key|
+        variable = lib.variables[key]
+        puts "#{variable.key} = #{variable.value} | #{variable.description}"
+      end
+    end
+
+    ############################
+    # Registration methods
+    ############################
 
     # Register a server
     def register_server(address, options)

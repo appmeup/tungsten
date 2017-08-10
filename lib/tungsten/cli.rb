@@ -13,9 +13,6 @@ module Tungsten
     end
 
     def run
-      initial_time = Time.new
-      puts "[#{initial_time.to_s}] Starting tungsten..."
-
       # Load Tungsten configuration
       Tungsten.load!
 
@@ -45,11 +42,12 @@ module Tungsten
       when 'uninstall'
         # Run stop and uninstall commands
         Tungsten.uninstall!
+      when 'lib'
+        # Run stop and uninstall commands
+        Tungsten.display_lib_info!(ARGV[1])
       else
         puts "No action supported"
       end
-
-      puts "[#{Time.new.to_s}] Done"
     end
 
     def parse_options(argsv)
