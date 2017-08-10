@@ -1,6 +1,6 @@
 module Tungsten
   module DSL
-    def add_server(address, options)
+    def server(address, options)
       Tungsten.register_server(address, options)
     end
 

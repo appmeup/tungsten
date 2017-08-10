@@ -8,7 +8,8 @@ module Tungsten
     end
 
     def parse
-      Tungsten.options.merge!(parse_options(ARGV))
+      parsed_options = parse_options(ARGV)
+      Tungsten.options.merge!(parsed_options)
       # puts "With options: #{Tungsten.options.inspect}"
     end
 

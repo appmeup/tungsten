@@ -1,6 +1,7 @@
 require "tungsten/library"
 require "tungsten/role"
 require "tungsten/server"
+require 'fileutils'
 
 module Tungsten
   module Core
@@ -48,6 +49,15 @@ module Tungsten
 
     def init!
       # Initialize Tungsten by creating the config file
+      if File.exists?('config/tungsten.rb')
+        puts "[WARN] Tungsten config file already exists"
+      else
+        if !Dir.exists?('config')
+          Dir.mkdir('config')
+        end
+        FileUtils.cp(File.expand_path("../templates/tungsten.rb", __FILE__), 'config/tungsten.rb')
+        puts "Tungsten config file created at: config/tungsten.rb"
+      end
     end
 
     # For each server: install, setup and run each library used by its role
