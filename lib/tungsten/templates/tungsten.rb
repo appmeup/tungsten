@@ -1,4 +1,4 @@
-# Install external libraries
+# Use installed external libraries
 # require 'tungsten/redis'
 
 # Add your servers and assign them roles
