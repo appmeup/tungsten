@@ -40,9 +40,15 @@ Configure your roles:
 role :app do
   uses :redis
 end
+
+role :db do
+  uses :redis, {
+    port: 1234
+  }
+end
 ```
 
-Configure libraries on the fly:
+You can configure libraries on the fly, adding this to `config/tungsten.rb` or to another file inside `config/tungsten/redis.rb`:
 
 ```ruby
 library :redis do
