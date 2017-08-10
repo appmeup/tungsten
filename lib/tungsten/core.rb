@@ -105,6 +105,15 @@ module Tungsten
       end
     end
 
+    def display_libs!
+      puts "Tungsten libraries:"
+      if libraries.keys.size === 0
+        puts "No libraries available"
+      else
+        puts libraries.keys.join(', ')
+      end
+    end
+
     def display_lib_info!(library_name)
       lib = libraries[library_name.to_sym]
       puts lib.name
@@ -120,6 +129,54 @@ module Tungsten
       variables.keys.each do |key|
         variable = lib.variables[key]
         puts "#{variable.key} = #{variable.value} | #{variable.description}"
+      end
+    end
+
+    def display_servers!
+      puts "Tungsten Servers"
+      if servers.size === 0
+        puts "No servers configured"
+      else
+        puts "[Roles]: Address"
+        puts "-----------------"
+        servers.each do |server|
+          puts "[#{server.roles.join(', ')}]: #{server.address}"
+        end
+      end
+    end
+
+    def display_roles!
+      puts "Tungsten Roles"
+      if roles.size === 0
+        puts "No roles created"
+      else
+        puts "[Role]: Libraries"
+        puts "-----------------"
+        roles.keys.each do |role|
+          libraries = roles[role].libraries.keys
+          if libraries.size === 0
+            puts "[#{role}]: No libraries associated"
+          else
+            puts "[#{role}]: #{libraries.join(', ')}"
+          end
+        end
+      end
+    end
+
+    def display_role!(role_name)
+      role = roles[role_name.to_sym]
+      if role
+        libraries = role.libraries.keys
+        puts "Role: #{role_name}"
+        puts "----------------------"
+        puts "Libraries"
+        if libraries.size === 0
+          puts "No libraries associated"
+        else
+          puts "#{libraries.join(', ')}"
+        end
+      else
+        puts "Role #{role_name} not found"
       end
     end
 

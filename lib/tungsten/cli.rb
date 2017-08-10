@@ -20,8 +20,13 @@ module Tungsten
       # Check which action was executed
       case ARGV[0]
       when 'init'
-        # Run installation, setup and run commands
+        # Create a config a file
         Tungsten.init!
+      when 'up'
+        # Run installation, setup and run commands
+        Tungsten.install!
+        Tungsten.setup!
+        Tungsten.run!
       when 'install'
         # Run installation commands
         Tungsten.install!
@@ -43,6 +48,18 @@ module Tungsten
       when 'uninstall'
         # Run stop and uninstall commands
         Tungsten.uninstall!
+      when 'libs'
+        # Display available libraries
+        Tungsten.display_libs!
+      when 'servers'
+        # Display available servers
+        Tungsten.display_servers!
+      when 'roles'
+        # Display available roles
+        Tungsten.display_roles!
+      when 'role'
+        # Display available roles
+        Tungsten.display_role!(ARGV[1])
       when 'lib'
         # Run stop and uninstall commands
         Tungsten.display_lib_info!(ARGV[1])
