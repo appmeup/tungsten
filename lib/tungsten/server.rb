@@ -17,10 +17,16 @@ module Tungsten
     end
 
     def ssh_options
-      return {
-        user: @options[:user],
-        keys: [@options[:key]].flatten
+      available_options = {
+        user: @options[:user]
       }
+      if @options[:key]
+        available_options[:keys] = [@options[:key]].flatten
+      end
+      if @options[:password]
+        available_options[:password] = @options[:password]
+      end
+      return available_options
     end
 
     def has_custom_ssh?
@@ -48,7 +54,7 @@ module Tungsten
           unique_libraries[library_name] = role.libraries[library_name] if !unique_libraries.keys.include?(library_name)
         end
       end
-      
+
       Tungsten.libraries.keys.select{|library_name| unique_libraries.keys.include?(library_name) }.each do |library_name|
         library = Tungsten.libraries[library_name].dup
         library.merge_args(unique_libraries[library_name])

@@ -26,7 +26,7 @@ module Tungsten
         # Run installation, setup and run commands
         Tungsten.install!
         Tungsten.setup!
-        Tungsten.run!
+        Tungsten.start!
       when 'install'
         # Run installation commands
         Tungsten.install!
