@@ -200,6 +200,14 @@ module Tungsten
       library
     end
 
+    def register_external_library(setup_path)
+      if File.exists?(setup_path)
+        eval(File.open(setup_path).read)
+      else
+        puts "[WARN] Error loading external library at #{setup_path}"
+      end
+    end
+
     # Check if a library was already registered
     def library_registered?(library_name)
       return !Tungsten.libraries[name].nil?
